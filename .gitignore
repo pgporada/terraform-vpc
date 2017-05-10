@@ -1,0 +1,9 @@
+.kitchen/
+*.retry
+.DS_Store
+.terraform/
+*.png
+*.jpg
+graph.png
+*.tfvars
+!environments/example/example.tfvars
