@@ -1,18 +1,20 @@
 variable "public_subnet_ids" {}
 
 resource "aws_eip" "nat_gateway" {
-  count = "${length(compact(split(",", var.public_subnet_ids)))}"
+  count = 2
 
   # Not usable until https://github.com/hashicorp/terraform/issues/12570
-  #  count = "${var.use_aws_nat_gw == 1 ? length(compact(split(",", var.public_subnet_ids))) : 0}"
+  # count = "${length(compact(split(",", var.public_subnet_ids)))}"
+  # count = "${var.use_aws_nat_gw == 1 ? length(compact(split(",", var.public_subnet_ids))) : 0}"
   vpc = true
 }
 
 resource "aws_nat_gateway" "gateway" {
-  count = "${length(compact(split(",", var.public_subnet_ids)))}"
+  count = 2
 
   # Not usable until https://github.com/hashicorp/terraform/issues/12570
-  #  count = "${var.use_aws_nat_gw == 1 ? length(compact(split(",", var.public_subnet_ids))) : 0}"
+  # count = "${length(compact(split(",", var.public_subnet_ids)))}"
+  # count = "${var.use_aws_nat_gw == 1 ? length(compact(split(",", var.public_subnet_ids))) : 0}"
   subnet_id = "${element(split(",", var.public_subnet_ids), count.index)}"
 
   allocation_id = "${element(aws_eip.nat_gateway.*.id, count.index)}"
