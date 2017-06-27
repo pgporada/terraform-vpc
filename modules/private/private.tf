@@ -4,9 +4,10 @@ variable "azs" {}
 variable "region" {}
 variable "vpc_cidr" {}
 variable "nat_gateway_ids" {}
+variable "subnets" { type = "list" }
 
 resource "aws_route_table" "private" {
-  count  = 1
+  count  = "${length(var.subnets)}"
   vpc_id = "${var.vpc_id}"
 
   tags {
@@ -18,14 +19,14 @@ resource "aws_route_table" "private" {
 
 resource "aws_route" "private" {
   #    count                   = "${length(compact(split(",", var.azs)))}"
-  count                  = 1
+  count                  = "${length(var.subnets)}"
   route_table_id         = "${element(aws_route_table.private.*.id, count.index)}"
   nat_gateway_id         = "${element(split(",", var.nat_gateway_ids), count.index)}"
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "private" {
-  count          = 1
+  count          = "${length(var.subnets)}"
   subnet_id      = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
@@ -52,9 +53,11 @@ POLICY
 }
 
 resource "aws_subnet" "private" {
-  count             = 1
-  vpc_id            = "${var.vpc_id}"
-  cidr_block        = "${cidrsubnet(var.vpc_cidr, 2, count.index+2)}"
+  count  = "${length(var.subnets)}"
+  vpc_id = "${var.vpc_id}"
+
+  # cidr_block        = "${cidrsubnet(var.vpc_cidr, 2, count.index+2)}"
+  cidr_block        = "${var.subnets[count.index]}"
   availability_zone = "${element(split(",", var.azs), count.index)}"
 
   tags {

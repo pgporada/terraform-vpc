@@ -5,8 +5,18 @@ variable "vpc_cidr" {}
 variable "state_bucket" {}
 variable "account_id" {}
 
+variable "private_subnets" {
+  type = "list"
+  default = []
+}
+
+variable "public_subnets" {
+  type = "list"
+  default = []
+}
+
 terraform {
-  required_version = ">= 0.9.8"
+  required_version = ">= 0.9.9"
 
   backend "s3" {
     encrypt = true
@@ -34,7 +44,6 @@ module "azs" {
   source = "modules/azs/"
 }
 
-
 // Generate subnets and routing tables
 module "public" {
   source   = "modules/public/"
@@ -43,6 +52,7 @@ module "public" {
   azs      = "${module.azs.azs}"
   region   = "${var.region}"
   vpc_cidr = "${var.vpc_cidr}"
+  subnets  = "${var.public_subnets}"
 }
 
 // Creates an AWS managed NAT Gateway so private subnet instances can hit the internet
@@ -61,6 +71,7 @@ module "private" {
   nat_gateway_ids = "${module.nat.gateway_ids}"
   region          = "${var.region}"
   vpc_cidr        = "${var.vpc_cidr}"
+  subnets         = "${var.private_subnets}"
 }
 
 output "environment" {
