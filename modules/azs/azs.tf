@@ -1,3 +1,5 @@
 data "aws_availability_zones" "available" {}
 
-output "azs" { value = "${data.aws_availability_zones.available.names[1]}" }
+output "azs" {
+  value = "${data.aws_availability_zones.available.names[1]}"
+}

@@ -2,12 +2,14 @@
 Builds the following infrastructure
 
 * VPC
-* Public subnet
-* Private subnet
-* Availability Zone
+* Public subnet(s)
+* Private subnet(s)
+* Availability Zone(s)
 * Routing tables
-* NAT Gateway + EIP
+* NAT Gateway(s) + EIP
 * Internet Gateway
+
+For more terraform related docs, please see our [wiki](https://letsencrypt.atlassian.net/wiki/display/~pporada/Terraform).
 
 - - - -
 # Usage
@@ -19,10 +21,18 @@ The Makefile will pull down a fresh secrets variable file from S3 during the **p
 - - - -
 # Updating variables for an environment
 
-    aws s3 --profile c6h12o6 cp s3://pgporada-state/terraform/vpc/c6h12o6.tfvars .
-    vim .tfvars
-    aws s3 --profile c6h12o6 cp c6h12o6.tfvars s3://pgporada-state/terraform/vpc/c6h12o6.tfvars
+Get
+
+    aws s3 --profile someawsprofile cp s3://somebucket/terraform/vpc/somevars.tfvars .
+
+Push
+
+    aws s3 --profile someawsprofile cp somevars.tfvars s3://somebucket/terraform/vpc/somevars.tfvars
 
 - - - -
 # Theme Music
-[David Dondero - Ashes on the Highway](https://daviddondero1.bandcamp.com/track/ashes-on-the-highway)
+[Erik Petersen - Old Tyme Memory](https://www.youtube.com/watch?v=8uziTOL4zOs)
+
+- - - -
+# License and Author Info
+(C) [Phil Porada](https://philporada.com) 2016 - philporada@gmail.com
