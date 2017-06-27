@@ -18,14 +18,19 @@ The Makefile will pull down a fresh secrets variable file from S3 during the **p
     ENVIRONMENT=c6h12o6 make plan
     ENVIRONMENT=c6h12o6 make apply
 
-- - - -
-# Updating variables for an environment
+Create a new environment so we don't have to use the default
 
-Get
+    terraform env new ${ENV_NAME}
+
+    # TODO
+    # This should be used to create an environment if it doesn't exist
+    # ENVIRONMENT=c6h12o6 make plan
+
+Get vars
 
     aws s3 --profile someawsprofile cp s3://somebucket/terraform/vpc/somevars.tfvars .
 
-Push
+Push vars
 
     aws s3 --profile someawsprofile cp somevars.tfvars s3://somebucket/terraform/vpc/somevars.tfvars
 
