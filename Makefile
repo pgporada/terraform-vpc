@@ -22,8 +22,8 @@ set-env:
      fi
 	@echo -e "\nRemoving existing ENVIRONMENT.tfvars from local directory"
 	@find . -maxdepth 1 -type f -name '*.tfvars' ! -name example_ENV.tfvars -exec rm -f {} \;
-	@echo -e "\nPulling fresh $(ENVIRONMENT).tfvars from s3://pgporada-state/terraform/$(BUCKETKEY)/"
-	@aws s3 cp s3://pgporada-state/terraform/$(BUCKETKEY)/$(ENVIRONMENT).tfvars . --profile=c6h12o6
+	@echo -e "\nPulling fresh $(ENVIRONMENT).tfvars from s3://$(AWS_STATE_BUCKET)/terraform/$(BUCKETKEY)/"
+	@aws s3 cp s3://$(AWS_STATE_BUCKET)/terraform/$(BUCKETKEY)/$(ENVIRONMENT).tfvars . --profile=$(AWS_PROFILE)
 
 init: validate set-env
 	@terraform init \

@@ -7,3 +7,4 @@
 graph.png
 *.tfvars
 !environments/example/example.tfvars
+*.backup
